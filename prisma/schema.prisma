@@ -1,0 +1,82 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../generated/prisma"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model favorite {
+  id_user      String    @db.Char(36)
+  id_poem      String    @db.Char(36)
+  favorited_at DateTime? @default(now()) @db.Timestamp(0)
+  poem         poem      @relation(fields: [id_poem], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_favorite_poem")
+  poet         poet      @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_favorite_user")
+
+  @@id([id_user, id_poem])
+  @@index([id_poem], map: "idx_favorite_poem")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model poem {
+  id             String       @id @db.Char(36)
+  id_user        String       @db.Char(36)
+  title          String       @db.VarChar(100)
+  content        String       @db.Text
+  mood_type      String       @db.VarChar(20)
+  created_at     DateTime?    @default(now()) @db.Timestamp(0)
+  last_update_at DateTime?    @default(now()) @db.Timestamp(0)
+  is_active      Boolean?     @default(true)
+  is_template    Boolean?     @default(false)
+  favorite       favorite[]
+  poet           poet         @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_poem")
+  share_poem     share_poem[]
+
+  @@index([created_at], map: "idx_poem_created_at")
+  @@index([mood_type], map: "idx_poem_mood")
+  @@index([id_user], map: "idx_poem_user")
+}
+
+model poet {
+  id                                      String         @id @db.Char(36)
+  email                                   String         @unique(map: "email") @db.VarChar(100)
+  username                                String         @db.VarChar(100)
+  user_password                           String         @db.VarChar(100)
+  is_active                               Boolean?       @default(true)
+  favorite                                favorite[]
+  poem                                    poem[]
+  share_poem_share_poem_id_authorTopoet   share_poem[]   @relation("share_poem_id_authorTopoet")
+  share_poem_share_poem_id_receiverTopoet share_poem[]   @relation("share_poem_id_receiverTopoet")
+  user_options                            user_options[]
+
+  @@index([email, user_password], map: "idx_credentials")
+  @@index([email], map: "idx_email")
+}
+
+model share_poem {
+  id                                String    @id @db.Char(36)
+  id_author                         String    @db.Char(36)
+  id_receiver                       String    @db.Char(36)
+  id_poem                           String    @db.Char(36)
+  created_at                        DateTime? @default(now()) @db.Timestamp(0)
+  poet_share_poem_id_authorTopoet   poet      @relation("share_poem_id_authorTopoet", fields: [id_author], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_author_share")
+  poem                              poem      @relation(fields: [id_poem], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_peom_share")
+  poet_share_poem_id_receiverTopoet poet      @relation("share_poem_id_receiverTopoet", fields: [id_receiver], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_receiver_share")
+
+  @@index([id_author], map: "fk_author_share")
+  @@index([id_poem], map: "fk_peom_share")
+  @@index([id_receiver], map: "fk_receiver_share")
+}
+
+/// This table contains check constraints and requires additional setup for migrations. Visit https://pris.ly/d/check-constraints for more info.
+model user_options {
+  id            String  @id @db.Char(36)
+  id_user       String  @db.Char(36)
+  user_theme    String? @default("light") @db.VarChar(5)
+  user_language String? @default("portugues") @db.VarChar(10)
+  poet          poet    @relation(fields: [id_user], references: [id], onDelete: NoAction, onUpdate: NoAction, map: "fk_user_options_user")
+
+  @@index([id_user], map: "idx_user_options_user")
+}
