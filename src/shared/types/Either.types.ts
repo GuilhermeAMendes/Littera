@@ -14,3 +14,9 @@ export type Either<L, R> = Left<L> | Right<R>;
 
 export const left = <L>(value: L): Either<L, never> => new Left(value);
 export const right = <R>(value: R): Either<never, R> => new Right(value);
+
+export const isLeft = <L, R>(either: Either<L, R>): either is Left<L> =>
+  either.tag === "left";
+
+export const isRight = <L, R>(either: Either<L, R>): either is Right<R> =>
+  either.tag === "right";
