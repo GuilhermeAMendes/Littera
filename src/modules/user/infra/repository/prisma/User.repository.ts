@@ -12,15 +12,17 @@ import { Password } from "../../../domain/value-object/Password";
 import { DatabaseError } from "../../../../../shared/errors/DatabaseError.error";
 import { EntityNotFoundError } from "../../../../../shared/errors/EntityNotFound.error";
 
-// Type
-import type { UserGateway } from "../../gateway/user.gateway";
+// Functions
 import {
-  Either,
   left,
   right,
   isLeft,
   isRight,
 } from "../../../../../shared/types/Either.types";
+
+// Type
+import type { UserGateway } from "../../gateway/user.gateway";
+import type { Either } from "../../../../../shared/types/Either.types";
 
 export class UserRepositoryPrisma implements UserGateway {
   private constructor(private readonly prismaClient: PrismaClient) {}
@@ -53,7 +55,7 @@ export class UserRepositoryPrisma implements UserGateway {
     }
   }
 
-  async findByd(
+  async findById(
     id: string
   ): Promise<Either<DatabaseError | EntityNotFoundError, User>> {
     try {
@@ -80,13 +82,13 @@ export class UserRepositoryPrisma implements UserGateway {
 
   async findByEmail(
     email: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, User | null>> {
+  ): Promise<Either<DatabaseError | EntityNotFoundError, User>> {
     try {
       const dbPoet = await this.prismaClient.poet.findFirst({
         where: { email, is_active: true },
       });
 
-      if (!dbPoet) return right(null);
+      if (!dbPoet) return left(new EntityNotFoundError("User not found."));
 
       const poet = User.restore({
         id: dbPoet.id,
@@ -108,7 +110,7 @@ export class UserRepositoryPrisma implements UserGateway {
     newUsername: string
   ): Promise<Either<DatabaseError | EntityNotFoundError, void>> {
     try {
-      const userResult = await this.findByd(id);
+      const userResult = await this.findById(id);
 
       if (isLeft(userResult)) return left(userResult.value);
 

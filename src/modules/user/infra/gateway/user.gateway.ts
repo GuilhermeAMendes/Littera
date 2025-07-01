@@ -10,12 +10,12 @@ import { Either } from "../../../../shared/types/Either.types";
 
 export interface UserGateway {
   create(user: User): Promise<Either<DatabaseError, void>>;
-  findByd(
+  findById(
     id: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, User | null>>;
+  ): Promise<Either<DatabaseError | EntityNotFoundError, User>>;
   findByEmail(
     email: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, User | null>>;
+  ): Promise<Either<DatabaseError | EntityNotFoundError, User>>;
   rename(
     id: string,
     newUsername: string
