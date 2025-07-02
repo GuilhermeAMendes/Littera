@@ -58,5 +58,5 @@ export const swaggerSpec = swaggerJSDoc({
       },
     },
   },
-  apis: ["src/presentation/controllers/express/**/*.ts"],
+  apis: ["src/modules/**/infra/controllers/express/**/*.ts"],
 });
