@@ -13,6 +13,7 @@ import type {
 // Function
 import { isLeft } from "../../../../../../shared/types/Either.types";
 import { presentCreateUserResponse } from "./CreateUser.presenter";
+import { buildResourceLink } from "../../../../../../shared/helpers/express/resourceURL.helper";
 
 export class CreateUserController implements Route {
   private constructor(
@@ -110,7 +111,11 @@ export class CreateUserController implements Route {
         isActive: createdUser.value.isActive,
       });
 
-      res.status(201).json(presenter);
+      const link = buildResourceLink({
+        request: req,
+        path: `users/${createdUser.value.id}`,
+      });
+      res.status(201).json({ ...presenter, link });
     };
   }
 
