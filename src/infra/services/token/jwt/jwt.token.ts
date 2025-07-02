@@ -8,7 +8,7 @@ import {
 } from "jsonwebtoken";
 
 // Type
-import type { TokenProvider } from "./jwt/interfaces/token.interfaces";
+import { TokenProvider } from "./interfaces/jwt.interfaces";
 
 export class JWTToken implements TokenProvider {
   sign(
