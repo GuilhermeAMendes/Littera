@@ -57,13 +57,11 @@ export class CreateUserUseCase
   }: CreateUserUseCaseInputDTO): Promise<
     Either<ApplicationError, CreateUserUseCaseOutputDTO>
   > {
-    const result = await this.userRepository.findByEmail(email);
+    const userLookup = await this.userRepository.findByEmail(email);
 
-    if (isRight(result))
+    if (isRight(userLookup)) {
       return left(new DatabaseError("This email is already in use."));
-
-    if (isLeft(result) && !(result.value instanceof EntityNotFoundError))
-      return result;
+    }
 
     const user: User = await User.create(
       username,
