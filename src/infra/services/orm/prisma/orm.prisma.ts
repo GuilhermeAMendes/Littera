@@ -5,7 +5,7 @@ export class PrismaORM {
 
   private constructor() {}
 
-  private static getInstance() {
+  public static getInstance() {
     if (this.instance == null) this.instance = new PrismaClient();
     return this.instance;
   }
