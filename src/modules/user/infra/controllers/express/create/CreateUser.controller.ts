@@ -113,7 +113,7 @@ export class CreateUserController implements Route {
 
       const link = buildResourceLink({
         request: req,
-        path: `users/${createdUser.value.id}`,
+        path: `users/${createdUser.value.id}/profile`,
       });
       res.status(201).json({ ...presenter, link });
     };
