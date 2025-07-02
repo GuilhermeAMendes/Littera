@@ -23,6 +23,7 @@ import {
 // Type
 import type { UserGateway } from "../../gateway/user.gateway";
 import type { Either } from "../../../../../shared/types/Either.types";
+import { ApplicationError } from "../../../../../shared/errors/Application.error";
 
 export class UserRepositoryPrisma implements UserGateway {
   private constructor(private readonly prismaClient: PrismaClient) {}
@@ -31,7 +32,7 @@ export class UserRepositoryPrisma implements UserGateway {
     return new UserRepositoryPrisma(prismaClient);
   }
 
-  async create(user: User): Promise<Either<DatabaseError, void>> {
+  async create(user: User): Promise<Either<ApplicationError, void>> {
     const poetData = {
       id: user.id,
       username: user.username,
@@ -39,14 +40,7 @@ export class UserRepositoryPrisma implements UserGateway {
       user_password: user.passwordHash,
       is_active: user.isActive,
     };
-
     try {
-      const emailResult = await this.findByEmail(user.email);
-      if (isRight(emailResult) && emailResult.value)
-        return left(
-          new DatabaseError("This email is already associated with a user")
-        );
-
       await this.prismaClient.poet.create({ data: poetData });
       return right(undefined);
     } catch (error) {
@@ -55,9 +49,7 @@ export class UserRepositoryPrisma implements UserGateway {
     }
   }
 
-  async findById(
-    id: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, User>> {
+  async findById(id: string): Promise<Either<ApplicationError, User>> {
     try {
       const dbPoet = await this.prismaClient.poet.findFirst({
         where: { id, is_active: true },
@@ -80,9 +72,7 @@ export class UserRepositoryPrisma implements UserGateway {
     }
   }
 
-  async findByEmail(
-    email: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, User>> {
+  async findByEmail(email: string): Promise<Either<ApplicationError, User>> {
     try {
       const dbPoet = await this.prismaClient.poet.findFirst({
         where: { email, is_active: true },
@@ -108,14 +98,14 @@ export class UserRepositoryPrisma implements UserGateway {
   async rename(
     id: string,
     newUsername: string
-  ): Promise<Either<DatabaseError | EntityNotFoundError, void>> {
+  ): Promise<Either<ApplicationError, void>> {
     try {
       const userResult = await this.findById(id);
 
       if (isLeft(userResult)) return left(userResult.value);
 
-      const user = userResult.value;
-      if (!user) return left(new EntityNotFoundError("User not found."));
+      if (!userResult.value)
+        return left(new EntityNotFoundError("User not found."));
 
       await this.prismaClient.poet.update({
         where: { id },
