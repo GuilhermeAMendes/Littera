@@ -9,7 +9,7 @@ import {
 } from "../../../../shared/factory/factory.shared";
 
 // Create
-import { CreateUserUseCase } from "../../application/use-cases/create/CreateUser.usecase";
+import { CreateUserUseCase } from "../../application/use-cases/express/create/CreateUser.usecase";
 import { CreateUserController } from "../controllers/express/create/CreateUser.controller";
 
 export function createUserControllers() {

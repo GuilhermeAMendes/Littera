@@ -1,11 +1,11 @@
 // Entity
-import { User } from "../../../domain/entity/User";
+import { User } from "../../../../domain/entity/User";
 
 // Service
-import type { UseCase } from "../../../../../shared/interfaces/usecase.interface";
-import type { Cryptation } from "../../../../../infra/services/cryptation/interfaces/cryptation.interfaces";
-import type { UUIDGenerator } from "../../../../../infra/services/uuid/interfaces/uuid.interfaces";
-import type { UserGateway } from "../../../infra/gateway/user.gateway";
+import type { UseCase } from "../../../../../../shared/interfaces/usecase.interface";
+import type { Cryptation } from "../../../../../../infra/services/cryptation/interfaces/cryptation.interfaces";
+import type { UUIDGenerator } from "../../../../../../infra/services/uuid/interfaces/uuid.interfaces";
+import type { UserGateway } from "../../../../infra/gateway/user.gateway";
 
 // DTO
 import type {
@@ -14,7 +14,7 @@ import type {
 } from "./createUser.usecase.dto";
 
 // Type
-import type { Either } from "../../../../../shared/types/Either.types";
+import type { Either } from "../../../../../../shared/types/Either.types";
 
 // Function
 import {
@@ -22,12 +22,12 @@ import {
   isRight,
   left,
   right,
-} from "../../../../../shared/types/Either.types";
+} from "../../../../../../shared/types/Either.types";
 
 // Error
-import { ApplicationError } from "../../../../../shared/errors/Application.error";
-import { DatabaseError } from "../../../../../shared/errors/DatabaseError.error";
-import { EntityNotFoundError } from "../../../../../shared/errors/EntityNotFound.error";
+import { ApplicationError } from "../../../../../../shared/errors/Application.error";
+import { DatabaseError } from "../../../../../../shared/errors/DatabaseError.error";
+import { EntityNotFoundError } from "../../../../../../shared/errors/EntityNotFound.error";
 
 export class CreateUserUseCase
   implements UseCase<CreateUserUseCaseInputDTO, CreateUserUseCaseOutputDTO>

@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 
 // Service
-import { CreateUserUseCase } from "../../../../application/use-cases/create/CreateUser.usecase";
+import { CreateUserUseCase } from "../../../../application/use-cases/express/create/CreateUser.usecase";
 
 // Type
 import type {
