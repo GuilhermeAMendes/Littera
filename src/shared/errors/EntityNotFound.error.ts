@@ -1,5 +1,5 @@
 // Class
-import { ApplicationError } from "./application.error";
+import { ApplicationError } from "./Application.error";
 
 export class EntityNotFoundError extends ApplicationError {
   constructor(message = "Entity not found") {

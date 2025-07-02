@@ -1,5 +1,5 @@
 // Class
-import { ApplicationError } from "./application.error";
+import { ApplicationError } from "./Application.error";
 
 export class UnauthorizedError extends ApplicationError {
   constructor(message = "Unauthorized") {

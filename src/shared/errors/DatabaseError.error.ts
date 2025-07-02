@@ -1,5 +1,5 @@
 // Class
-import { ApplicationError } from "./application.error";
+import { ApplicationError } from "./Application.error";
 
 export class DatabaseError extends ApplicationError {
   constructor(message = "Database error") {
