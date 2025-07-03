@@ -17,7 +17,7 @@ export const HttpMethods = {
 } as const;
 
 export interface Route {
-  getMiddlewares?(): ExpressMiddleware;
+  getMiddlewares?(): ExpressMiddleware[];
   getHandler(): (req: Request, res: Response) => Promise<void>;
   getPath(): string;
   getVerb(): HttpVerb;
