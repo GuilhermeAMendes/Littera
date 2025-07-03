@@ -59,8 +59,8 @@ export class LoginUserUseCase
       return left(new UnauthorizedError("Invalid credentials"));
     }
     const isPasswordCorrect = await this.cryptationService.compare(
-      userLookup.value.passwordHash,
-      password
+      password,
+      userLookup.value.passwordHash
     );
 
     if (!isPasswordCorrect)
