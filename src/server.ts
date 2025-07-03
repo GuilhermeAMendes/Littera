@@ -8,12 +8,16 @@ import { APIExpress } from "./api/express/api.express";
 
 // Factory
 import { createUserControllers } from "./modules/user/infra/factory/user.factory";
+import { createAuthControllers } from "./modules/auth/infra/factory/auth.factory";
 
 dotenv.config();
 const PORT = Number(process.env.PORT) || 3333;
 
 function runApplication() {
-  const applicationControllers = [...createUserControllers()];
+  const applicationControllers = [
+    ...createUserControllers(),
+    ...createAuthControllers(),
+  ];
 
   const API = APIExpress.create(applicationControllers);
 
