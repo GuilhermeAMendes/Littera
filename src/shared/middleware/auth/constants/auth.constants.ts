@@ -1,4 +1,9 @@
-// Service
-import { Crypto } from "../../../../infra/services/uuid/crypto.uuid";
+// External library
+import { config } from "dotenv";
+config();
 
-export const SECRET_KEY = process.env.KEY || new Crypto().generate();
+if (!process.env.KEY) {
+  throw new Error("SECRET KEY is missing in environment variables.");
+}
+
+export const SECRET_KEY = process.env.KEY!;

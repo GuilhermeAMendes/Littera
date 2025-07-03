@@ -11,8 +11,8 @@ export function authMiddleware(tokenProvider: TokenProvider) {
   return (request: Request, response: Response, next: NextFunction): void => {
     const authHeader = request.headers.authorization;
 
-    if (!authHeader || !authHeader.startsWith("Bearer ")) {
-      response.status(401).json({ error: "Token is missing or malformed" });
+    if (!authHeader) {
+      response.status(401).json({ message: "Token is missing" });
       return;
     }
 
